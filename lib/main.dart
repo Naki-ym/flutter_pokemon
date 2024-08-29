@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pokemon/const/pokeapi.dart';
 import 'package:flutter_pokemon/models/pokemon.dart';
+import 'package:flutter_pokemon/models/theme_mode.dart';
+import 'package:flutter_pokemon/models/favorite.dart';
+import 'package:flutter_pokemon/settings.dart';
+import 'package:flutter_pokemon/poke_list.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_pokemon/poke_list_item.dart';
-import 'package:flutter_pokemon/settings.dart';
-import 'package:flutter_pokemon/models/theme_mode.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences pref = await SharedPreferences.getInstance();
   final themeModeNotifier = ThemeModeNotifier(pref);
   final pokemonsNotifier = PokemonsNotifier();
+  final favoritesNotifier = FavoritesNotifier();
   runApp(
     MultiProvider(
       providers: [
@@ -20,7 +21,10 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => pokemonsNotifier,
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => favoritesNotifier,
+        ),
       ],
       child: const MyApp(),
     ),
@@ -88,46 +92,6 @@ class _TopPageState extends State<TopPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class PokeList extends StatefulWidget {
-  const PokeList({super.key,});
-
-  @override
-  State<PokeList> createState() => _PokeListState();
-}
-
-class _PokeListState extends State<PokeList> {
-  static const int more = 30;
-  int pokeCount = more;
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<PokemonsNotifier>(
-      builder: (context, pokes, child) => ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-          itemCount: pokeCount + 1,
-          itemBuilder: (context, index) {
-            if (index == pokeCount) {
-              return OutlinedButton(
-                child: const Text('more'),
-                onPressed: () => {
-                  setState(() {
-                    pokeCount += more;
-                    if(pokeCount > pokeMaxId) {
-                      pokeCount = pokeMaxId;
-                    }
-                  })
-                },
-              );
-            } else {
-              return PokeListItem(
-                poke: pokes.byId(index + 1),
-              );
-            }
-          }
-        )
     );
   }
 }
