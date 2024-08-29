@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_pokemon/theme_mode_selection_page.dart';
-import 'package:flutter_pokemon/utils/theme_mode.dart';
 import 'package:flutter_pokemon/models/theme_mode.dart';
 
 
