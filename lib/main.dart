@@ -72,7 +72,10 @@ class _TopPageState extends State<TopPage> {
       // TODO: onPopInvokedで確認ダイアログを出すようにする
       child: Scaffold(
         body: SafeArea(
-          child: currentbnb == 0 ? const PokeList() : const Settings(),
+          child: IndexedStack(
+            index: currentbnb,
+            children: const [PokeList(), Settings()],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (index) => {
